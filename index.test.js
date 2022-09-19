@@ -9,6 +9,12 @@ test('blank files do not count', async () => {
 	expect(isPresent).toBe(false);
 });
 
+test('false if file does not exist', async () => {
+	const isPresent = await checkExistence('abc');
+	console.log(isPresent);
+	expect(isPresent).toBe(false);
+});
+
 test('look for file', async () => {
   const isPresent = await checkExistence('.github/dependabot.yml');
   console.log(isPresent);

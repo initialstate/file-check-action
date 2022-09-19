@@ -1,6 +1,32 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 793:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const fs = __nccwpck_require__(747);
+
+async function checkExistence(path) {
+	try {
+		const data = fs.readFileSync(path,'utf8')
+		if (data) {
+			if (data.length == 0) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	} catch (error) {
+		return false;
+	}
+  }
+
+module.exports = checkExistence;
+
+/***/ }),
+
 /***/ 351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -1555,23 +1581,6 @@ exports.debug = debug; // for test
 
 /***/ }),
 
-/***/ 258:
-/***/ ((module) => {
-
-let wait = function (milliseconds) {
-  return new Promise((resolve) => {
-    if (typeof milliseconds !== 'number') {
-      throw new Error('milliseconds not a number');
-    }
-    setTimeout(() => resolve("done!"), milliseconds)
-  });
-};
-
-module.exports = wait;
-
-
-/***/ }),
-
 /***/ 357:
 /***/ ((module) => {
 
@@ -1694,24 +1703,22 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(186);
-const wait = __nccwpck_require__(258);
+const checkExistence = __nccwpck_require__(793);
 
-
-// most @actions toolkit packages have async methods
 async function run() {
-  try {
-    const ms = core.getInput('milliseconds');
-    core.info(`Waiting ${ms} milliseconds ...`);
-
-    core.debug((new Date()).toTimeString()); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-    await wait(parseInt(ms));
-    core.info((new Date()).toTimeString());
-
-    core.setOutput('time', new Date().toTimeString());
-  } catch (error) {
-    core.setFailed(error.message);
+	try {
+		const file = core.getInput('file');
+		const isPresent = await checkExistence(file);
+		if (isPresent) {
+			core.setOutput('file_exists','true');
+		}
+	} catch (error) {
+		if (!(error instanceof Error)) {
+			throw error
+		}
+		core.setFailed(error.message);
+	}
   }
-}
 
 run();
 
