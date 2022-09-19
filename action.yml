@@ -1,13 +1,13 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'Check for file'
+description: 'check for file existence'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  file:  # file name
+    description: 'file path'
     required: true
-    default: '1000'
+    default: '.github/CODEOWNERS'
 outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
+  file_exists: # output will be available to future steps
+    description: 'if the file exists'
 runs:
   using: 'node16'
   main: 'dist/index.js'
