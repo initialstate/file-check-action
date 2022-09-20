@@ -9,17 +9,13 @@ const fs = __nccwpck_require__(747);
 async function checkExistence(path) {
 	try {
 		const data = fs.readFileSync(path,'utf8')
-		if (data) {
-			if (data.length == 0) {
-				return false;
-			} else {
-				return true;
-			}
+		if (data && data.length > 0) {
+			return {isPresent:true,message:`${path} exists`};
 		} else {
-			return false;
+			return {isPresent:false,message:`${path} exists with no content. Please finish file contents before proceeding.`};
 		}
 	} catch (error) {
-		return false;
+		return {isPresent:false,message:`Error finding ${path}. Please ensure file exists and is in the correct location.`};
 	}
   }
 
@@ -1708,14 +1704,14 @@ const checkExistence = __nccwpck_require__(793);
 async function run() {
 	try {
 		const file = core.getInput('file');
-		const isPresent = await checkExistence(file);
+		const {isPresent, message} = await checkExistence(file);
 		if (isPresent) {
 			core.setOutput('file_exists','true');
+		} else {
+			core.setOutput('file_exists','false');
+			core.setFailed(message);
 		}
 	} catch (error) {
-		if (!(error instanceof Error)) {
-			throw error
-		}
 		core.setFailed(error.message);
 	}
   }
