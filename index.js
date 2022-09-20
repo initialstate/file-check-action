@@ -9,11 +9,9 @@ async function run() {
 			core.setOutput('file_exists','true');
 		} else {
 			core.setOutput('file_exists','false');
+			core.warning('An important file is empty or missing.')
 		}
 	} catch (error) {
-		if (!(error instanceof Error)) {
-			throw error
-		}
 		core.setFailed(error.message);
 	}
   }
