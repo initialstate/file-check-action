@@ -1711,6 +1711,8 @@ async function run() {
 		const isPresent = await checkExistence(file);
 		if (isPresent) {
 			core.setOutput('file_exists','true');
+		} else {
+			core.setOutput('file_exists','false');
 		}
 	} catch (error) {
 		if (!(error instanceof Error)) {
