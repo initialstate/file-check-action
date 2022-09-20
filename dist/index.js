@@ -11,15 +11,15 @@ async function checkExistence(path) {
 		const data = fs.readFileSync(path,'utf8')
 		if (data) {
 			if (data.length == 0) {
-				return false;
+				return {isPresent:false,message:'File exists with no content. Please finish file contents before proceeding.'};
 			} else {
-				return true;
+				return {isPresent:true,message:'File exists'};
 			}
 		} else {
-			return false;
+			return {isPresent:false,message:'File does not exist. Please create file before proceeding.'};
 		}
 	} catch (error) {
-		return false;
+		return {isPresent:false,message:'Error finding file'};
 	}
   }
 
@@ -1708,12 +1708,12 @@ const checkExistence = __nccwpck_require__(793);
 async function run() {
 	try {
 		const file = core.getInput('file');
-		const isPresent = await checkExistence(file);
+		const {isPresent, message} = await checkExistence(file);
 		if (isPresent) {
 			core.setOutput('file_exists','true');
 		} else {
 			core.setOutput('file_exists','false');
-			core.warning('An important file is empty or missing.')
+			core.warning(message);
 		}
 	} catch (error) {
 		core.setFailed(error.message);
