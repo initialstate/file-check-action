@@ -1709,7 +1709,7 @@ async function run() {
 			core.setOutput('file_exists','true');
 		} else {
 			core.setOutput('file_exists','false');
-			core.warning(message);
+			core.setFailed(message);
 		}
 	} catch (error) {
 		core.setFailed(error.message);
