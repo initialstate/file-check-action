@@ -34,3 +34,17 @@ test('fail if no codeowner global owner', async () => {
 	expect(isPresent).toBe(false);
 	expect(message).toBe('There is no global owner in .github/CODEOWNERS-bad. Please add one before proceeding.');
   });
+
+test('find file without extension', async () => {
+	const {isPresent,message} = await checkExistence('README');
+	console.log(message);
+	expect(isPresent).toBe(true);
+	expect(message).toBe('README exists');
+});
+
+test('error on no file without extension', async () => {
+	const {isPresent,message} = await checkExistence('abc');
+	console.log(message);
+	expect(isPresent).toBe(false);
+	expect(message).toBe('Error finding abc. Please ensure file exists and is in the correct location.');
+});

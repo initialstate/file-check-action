@@ -1,11 +1,24 @@
 const fs = require('fs');
 const checkCodeowners = require('./check-contents');
 
+async function checkPath(path) {
+	try {
+		if (fs.existsSync(path)) {return path}
+		else if (fs.existsSync(`${path}.md`)) {return `${path}.md`}
+		else if (fs.existsSync(`${path}.txt`)) {return `${path}.txt`}
+		else if (fs.existsSync(`${path}.rst`)) {return `${path}.rst`}
+		else {throw Error}
+	} catch (error) {
+		return error;
+	}
+}
+
 async function checkExistence(path) {
 	try {
-		const data = fs.readFileSync(path,'utf8')
+		const truePath = await checkPath(path);
+		const data = fs.readFileSync(truePath,'utf8')
 		if (data && data.length > 0) {
-			if (path.includes('CODEOWNERS')) {
+			if (truePath.includes('CODEOWNERS')) {
 				const contentCheck = await checkCodeowners(data);
 				if (!contentCheck) {
 					return {isPresent:false,message:`There is no global owner in ${path}. Please add one before proceeding.`};
