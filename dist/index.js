@@ -1,15 +1,44 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 526:
+/***/ ((module) => {
+
+async function checkCodeowners(data) {
+	try {
+		console.log(data)
+		if (data.includes('* ') && data.includes('@')) {
+			return true;
+		} else {
+			return false;
+		}
+	} catch (error) {
+		return false;
+	}
+  }
+
+module.exports = checkCodeowners;
+
+/***/ }),
+
 /***/ 793:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const fs = __nccwpck_require__(747);
+const checkCodeowners = __nccwpck_require__(526);
 
 async function checkExistence(path) {
 	try {
 		const data = fs.readFileSync(path,'utf8')
 		if (data && data.length > 0) {
+			if (path.includes('CODEOWNERS')) {
+				const contentCheck = await checkCodeowners(data);
+				if (!contentCheck) {
+					return {isPresent:false,message:`There is no global owner in ${path}. Please add one before proceeding.`};
+				} else {
+					return {isPresent:true,message:`${path} exists`};
+				}
+			}
 			return {isPresent:true,message:`${path} exists`};
 		} else {
 			return {isPresent:false,message:`${path} exists with no content. Please finish file contents before proceeding.`};
