@@ -7,6 +7,8 @@ async function checkPath(path) {
 		else if (fs.existsSync(`${path}.md`)) {return `${path}.md`}
 		else if (fs.existsSync(`${path}.txt`)) {return `${path}.txt`}
 		else if (fs.existsSync(`${path}.rst`)) {return `${path}.rst`}
+		else if (fs.existsSync(`${path}-MIT`)) {return `${path}-MIT`}
+		else if (fs.existsSync(`${path}-APACHE`)) {return `${path}-APACHE`}
 		else {throw Error}
 	} catch (error) {
 		return error;
