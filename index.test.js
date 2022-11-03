@@ -48,3 +48,10 @@ test('error on no file without extension', async () => {
 	expect(isPresent).toBe(false);
 	expect(message).toBe('Error finding abc. Please ensure file exists and is in the correct location.');
 });
+
+test('should work on lowercase', async () => {
+	const {isPresent,message} = await checkExistence('license.txt');
+	console.log(message);
+	expect(isPresent).toBe(true);
+	expect(message).toBe('license.txt exists');
+});

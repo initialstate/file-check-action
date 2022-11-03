@@ -3,12 +3,13 @@ const checkCodeowners = require('./check-contents');
 
 async function checkPath(path) {
 	try {
-		if (fs.existsSync(path)) {return path}
-		else if (fs.existsSync(`${path}.md`)) {return `${path}.md`}
-		else if (fs.existsSync(`${path}.txt`)) {return `${path}.txt`}
-		else if (fs.existsSync(`${path}.rst`)) {return `${path}.rst`}
-		else if (fs.existsSync(`${path}-MIT`)) {return `${path}-MIT`}
-		else if (fs.existsSync(`${path}-APACHE`)) {return `${path}-APACHE`}
+		let lowerCasePath = path.toLowerCase();
+		if (fs.existsSync(path) || fs.existsSync(lowerCasePath)) {return path}
+		else if (fs.existsSync(`${path}.md`) || fs.existsSync(`${lowerCasePath}.md`)) {return `${path}.md`}
+		else if (fs.existsSync(`${path}.txt`) || fs.existsSync(`${lowerCasePath}.txt`)) {return `${path}.txt`}
+		else if (fs.existsSync(`${path}.rst`) || fs.existsSync(`${lowerCasePath}.rst`)) {return `${path}.rst`}
+		else if (fs.existsSync(`${path}-MIT`) || fs.existsSync(`${lowerCasePath}-MIT`)) {return `${path}-MIT`}
+		else if (fs.existsSync(`${path}-APACHE`) || fs.existsSync(`${lowerCasePath}-APACHE`)) {return `${path}-APACHE`}
 		else {throw Error}
 	} catch (error) {
 		return error;
